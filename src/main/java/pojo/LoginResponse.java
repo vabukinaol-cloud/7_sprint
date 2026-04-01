@@ -1,5 +1,4 @@
 package pojo;
-
 public class LoginResponse {
 
     private int id;

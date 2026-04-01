@@ -1,4 +1,3 @@
-
 import io.qameta.allure.Description;
 import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.AfterEach;
