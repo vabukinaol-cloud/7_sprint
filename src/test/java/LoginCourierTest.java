@@ -1,3 +1,4 @@
+
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -5,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import pojo.CourierCreate;
 import pojo.CourierLogin;
 import pojo.LoginResponse;
+import utils.CourierGenerator;
 import client.CourierClient;
 
 import static org.hamcrest.Matchers.is;
@@ -13,14 +15,13 @@ import static org.hamcrest.Matchers.notNullValue;
 public class LoginCourierTest {
     private CourierClient courierClient;
     private int courierId;
-    private final String login = "auth_ninja_lera";
-    private final String password = "password123";
+    private CourierCreate courier;
 
     @BeforeEach
     public void setUp() {
         courierClient = new CourierClient();
-        // Создаем курьера перед тестом авторизации
-        courierClient.create(new CourierCreate(login, password, "Lera"));
+        courier = CourierGenerator.getRandomCourier();
+        courierClient.create(courier);
     }
 
     @AfterEach
@@ -33,7 +34,7 @@ public class LoginCourierTest {
     @Test
     @Description("Курьер может авторизоваться. Успешный запрос возвращает id")
     public void courierCanLogin() {
-        CourierLogin credentials = new CourierLogin(login, password);
+        CourierLogin credentials = new CourierLogin(courier.getLogin(), courier.getPassword());
 
         LoginResponse response = courierClient.login(credentials)
                 .statusCode(200)
@@ -46,7 +47,7 @@ public class LoginCourierTest {
     @Test
     @Description("Система вернёт ошибку, если неправильно указать пароль")
     public void shouldReturnErrorWithWrongPassword() {
-        CourierLogin credentials = new CourierLogin(login, "wrong_pass");
+        CourierLogin credentials = new CourierLogin(courier.getLogin(), "wrong_password_123");
 
         courierClient.login(credentials)
                 .statusCode(404)
@@ -56,7 +57,7 @@ public class LoginCourierTest {
     @Test
     @Description("Если какого-то поля (логина) нет, запрос возвращает ошибку 400")
     public void shouldReturnErrorWhenLoginIsNull() {
-        CourierLogin credentials = new CourierLogin(null, password);
+        CourierLogin credentials = new CourierLogin(null, courier.getPassword());
 
         courierClient.login(credentials)
                 .statusCode(400)
@@ -66,7 +67,7 @@ public class LoginCourierTest {
     @Test
     @Description("Ошибка при авторизации под несуществующим пользователем")
     public void shouldReturnErrorForNonExistentUser() {
-        CourierLogin credentials = new CourierLogin("ghost_ninja_123987", "some_pass");
+        CourierLogin credentials = new CourierLogin("non_existent_ninja_9999", "some_pass");
 
         courierClient.login(credentials)
                 .statusCode(404)

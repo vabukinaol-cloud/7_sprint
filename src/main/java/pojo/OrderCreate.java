@@ -5,10 +5,8 @@ public class OrderCreate {
     private String firstName = "Лера";
     private String lastName = "Букина";
     private String address = "Ставрополь, ул.Банановая";
-    // Исправлено: тип int для соответствия числу 1
     private int metroStation = 1;
     private String phone = "89063101579";
-    // Исправлено: тип int для соответствия числу 1 (убрали кавычки)
     private int rentTime = 1;
     private String deliveryDate = "2026-04-01";
     private String comment = "хочу самокат";
