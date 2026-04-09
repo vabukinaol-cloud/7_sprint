@@ -1,22 +1,34 @@
 package pojo;
+
+import com.github.javafaker.Faker;
 import java.util.List;
 
 public class OrderCreate {
-    private String firstName = "Лера";
-    private String lastName = "Букина";
-    private String address = "Ставрополь, ул.Банановая";
-    private int metroStation = 1;
-    private String phone = "89063101579";
-    private int rentTime = 1;
-    private String deliveryDate = "2026-04-01";
-    private String comment = "хочу самокат";
+    private String firstName;
+    private String lastName;
+    private String address;
+    private int metroStation;
+    private String phone;
+    private int rentTime;
+    private String deliveryDate;
+    private String comment;
     private List<String> color;
 
     public OrderCreate(List<String> color) {
+        Faker faker = new Faker();
+        this.firstName = faker.name().firstName();
+        this.lastName = faker.name().lastName();
+        this.address = faker.address().streetAddress();
+        this.metroStation = faker.number().numberBetween(1, 15);
+        this.phone = faker.numerify("+7##########");
+        this.rentTime = faker.number().numberBetween(1, 7);
+        this.deliveryDate = "2026-06-01";
+        this.comment = faker.lorem().sentence();
         this.color = color;
     }
 
     public OrderCreate() {
+        this(List.of());
     }
 
     public String getFirstName() {

@@ -22,6 +22,10 @@ public class LoginCourierTest {
         courierClient = new CourierClient();
         courier = CourierGenerator.getRandomCourier();
         courierClient.create(courier);
+        courierId = courierClient.login(new CourierLogin(courier.getLogin(), courier.getPassword()))
+                .statusCode(200)
+                .extract().as(LoginResponse.class)
+                .getId();
     }
 
     @AfterEach
